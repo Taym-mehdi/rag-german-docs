@@ -1,3 +1,5 @@
+#app/db/models.py
+
 from sqlalchemy import Column, Integer, String, Text, DateTime, func
 from app.db.database import Base
 
