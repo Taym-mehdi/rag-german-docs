@@ -1,15 +1,15 @@
-from fastapi import FastAPI, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from app.db.database import get_db, init_db
-from app.db.models import Document
-from app.schemas.document import DocumentCreate, DocumentRead
+from app.db.database import init_db
+from app.config import ENV
+from app.routers import documents
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    if ENV == "development":
+        init_db()
     yield
 
 
@@ -18,34 +18,4 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
-
-
-@app.post("/documents", response_model=DocumentRead, status_code=201)
-def create_document(
-    doc: DocumentCreate,
-    db: Session = Depends(get_db),
-):
-    document = Document(
-        title=doc.title,
-        filename=doc.filename,
-        text=doc.text,
-    )
-    db.add(document)
-    db.commit()
-    db.refresh(document)
-    return document
-
-
-@app.get("/documents/{document_id}", response_model=DocumentRead)
-def get_document(
-    document_id: int,
-    db: Session = Depends(get_db),
-):
-    document = db.get(Document, document_id)
-    if not document:
-        raise HTTPException(status_code=404, detail="Document not found")
-    return document
+app.include_router(documents.router)

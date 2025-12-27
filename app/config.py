@@ -1,17 +1,16 @@
-from pathlib import Path
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
+# Project root
 ROOT_DIR = Path(__file__).resolve().parents[1]
 
-env_path = ROOT_DIR / ".env"
-if env_path.exists():
-    load_dotenv(env_path)
+# Load .env
+load_dotenv(ROOT_DIR / ".env")
 
-DATA_DIR = ROOT_DIR / "data"
-DATA_DIR.mkdir(exist_ok=True)
+ENV = os.getenv("ENV", "development")
 
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    f"sqlite:///{DATA_DIR / 'rag_dev.db'}"
+    f"sqlite:///{ROOT_DIR / 'data' / 'dev.db'}",
 )
