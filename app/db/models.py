@@ -2,7 +2,7 @@
 
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
-from datetime import datetime
+from datetime import datetime , UTC 
 
 from app.db.database import Base
 
@@ -14,7 +14,7 @@ class Document(Base):
     title = Column(String(255), nullable=True)
     filename = Column(String(512), nullable=True)
     text = Column(Text, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.now(UTC))
 
     chunks = relationship(
         "Chunk",
