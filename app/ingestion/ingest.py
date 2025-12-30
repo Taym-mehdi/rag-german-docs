@@ -1,9 +1,9 @@
-#app/ingestion/ingest.py
-
 from sqlalchemy.orm import Session
 
 from app.db.models import Document, Chunk
 from app.ingestion.chunker import chunk_sentences
+from app.retrieval.embeddings import EmbeddingService
+from app.retrieval.vector_store import VectorStore
 
 
 def ingest_document(
@@ -13,10 +13,12 @@ def ingest_document(
     text: str,
 ) -> Document:
     """
-    Day 3 ingestion:
+    Day 4 ingestion:
     - Store document
-    - Sentence-based chunking
+    - Sentence chunking
     - Store chunks
+    - Embed chunks
+    - Store vectors
     """
 
     document = Document(
@@ -29,9 +31,10 @@ def ingest_document(
     db.commit()
     db.refresh(document)
 
-    chunks = chunk_sentences(text)
+    chunks_data = chunk_sentences(text)
+    chunk_objects: list[Chunk] = []
 
-    for c in chunks:
+    for c in chunks_data:
         chunk = Chunk(
             document_id=document.id,
             text=c["text"],
@@ -39,8 +42,34 @@ def ingest_document(
             end_sentence=c["end_sentence"],
         )
         db.add(chunk)
+        chunk_objects.append(chunk)
 
     db.commit()
     db.refresh(document)
+
+    # --- Embeddings ---
+    texts = [c.text for c in chunk_objects]
+
+    embedder = EmbeddingService()
+    embeddings = embedder.embed(texts)
+
+    vector_store = VectorStore()
+
+    ids = [str(c.id) for c in chunk_objects]
+    metadatas = [
+        {
+            "document_id": document.id,
+            "chunk_id": c.id,
+            "filename": document.filename,
+        }
+        for c in chunk_objects
+    ]
+
+    vector_store.add(
+        ids=ids,
+        embeddings=embeddings,
+        documents=texts,
+        metadatas=metadatas,
+    )
 
     return document
