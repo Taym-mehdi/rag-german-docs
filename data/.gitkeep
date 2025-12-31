@@ -1,0 +1,40 @@
+rag-german-docs/
+│
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── config.py
+│   │
+│   └── db/
+│       ├── __init__.py
+│       ├── database.py
+│       └── models.py
+│   └── ingestion/
+│       ├── chunker.py
+│       ├── ingest.py
+│   └── retrieval/
+│       ├── embeddings.py
+│       ├── vector_store.py
+│       ├── retriever.py
+│       ├── search.py
+│       ├──context_builder.py
+│   └── routers/
+│       ├── __init__.py
+│       ├── documents.py
+│       ├── search.py
+│   └── schemas/
+│       ├── __init__.py
+│       ├── document.py
+│       ├── search.py
+├── data/
+│   └── .gitkeep
+│   └── chroma/
+│   └── dev.db
+│
+├── tests/
+│   └── __init__.py
+│
+├── .env
+├── .gitignore
+├── requirements.txt
+└── README.md
