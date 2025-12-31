@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from app.db.database import init_db
 from app.config import ENV
 from app.routers import documents
+from app.routers import search
 
 
 @asynccontextmanager
@@ -19,3 +20,4 @@ app = FastAPI(
 )
 
 app.include_router(documents.router)
+app.include_router(search.router)
