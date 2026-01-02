@@ -1,13 +1,12 @@
 from pydantic import BaseModel
-from typing import Any
+from typing import List
 
 
-class SearchResult(BaseModel):
+class ContextBlock(BaseModel):
+    document_id: int
     text: str
-    score: float
-    metadata: dict[str, Any]
 
 
 class SearchResponse(BaseModel):
     query: str
-    results: list[SearchResult]
+    results: List[ContextBlock]

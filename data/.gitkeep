@@ -16,7 +16,6 @@ rag-german-docs/
 │       ├── embeddings.py
 │       ├── vector_store.py
 │       ├── retriever.py
-│       ├── search.py
 │       ├──context_builder.py
 │   └── routers/
 │       ├── __init__.py

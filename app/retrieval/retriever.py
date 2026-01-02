@@ -33,7 +33,7 @@ class Retriever:
             hits.append({
                 "text": results["documents"][0][i],
                 "metadata": results["metadatas"][0][i],
-                "score": float(results["distances"][0][i]),
+                "score": 1.0 - float(results["distances"][0][i]),
             })
 
         return hits
