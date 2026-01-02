@@ -15,7 +15,6 @@ def ingest_document(
     text: str,
 ) -> Document:
     """
-    Day 4 ingestion:
     - Store document
     - Sentence chunking
     - Store chunks
