@@ -9,4 +9,5 @@ class ContextBlock(BaseModel):
 
 class SearchResponse(BaseModel):
     query: str
-    results: List[ContextBlock]
+    answer: str
+    sources: List[ContextBlock]

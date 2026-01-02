@@ -25,6 +25,10 @@ rag-german-docs/
 │       ├── __init__.py
 │       ├── document.py
 │       ├── search.py
+│   └── llm/
+│       ├── __init__.py
+│       ├── client.py
+│       ├── prompt.py
 ├── data/
 │   └── .gitkeep
 │   └── chroma/
