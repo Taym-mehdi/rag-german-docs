@@ -4,7 +4,7 @@ from typing import List, Dict
 
 
 class ContextBuilder:
-    def __init__(self, max_chars: int = 2000):
+    def __init__(self, max_chars: int = 3000):
         #Approximate size control before sending context to an LLM.
         self.max_chars = max_chars
 
