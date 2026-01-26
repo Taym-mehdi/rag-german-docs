@@ -3,6 +3,7 @@ import uuid
 from fastapi import APIRouter, UploadFile, File, Depends, HTTPException
 from sqlalchemy.orm import Session
 
+from app.schemas.document import DocumentCreate, DocumentResponse
 from app.db.database import get_db
 from app.ingestion.ingest import ingest_document
 from app.ingestion.pdf_reader import PDFReader
@@ -15,6 +16,29 @@ router = APIRouter(
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
+@router.post("", response_model=DocumentResponse)
+def create_document(
+    payload: DocumentCreate,
+    db: Session = Depends(get_db),
+):
+    """
+    Ingest a document from raw text (JSON).
+    Used by API clients and tests.
+    """
+    document = ingest_document(
+        db=db,
+        title=payload.title,
+        filename=payload.filename,
+        text=payload.text,
+    )
+
+    return DocumentResponse(
+        id=document.id,
+        title=document.title,
+        filename=document.filename,
+        created_at=document.created_at.isoformat(),
+        chunks=len(document.chunks),
+    )
 
 @router.post("/upload-pdf")
 def upload_pdf(
